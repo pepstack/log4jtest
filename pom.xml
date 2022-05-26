@@ -1,0 +1,122 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.github</groupId>
+    <artifactId>log4jtest</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <name>log4jtest</name>
+    <url>http://maven.apache.org</url>
+  
+    <!--
+    此工程用下面的命令行创建:
+      $ mvn archetype:generate -DgroupId=com.github -DartifactId=log4jtest -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+
+    命令卡在 Generating project in Batch mode 时, 按下面的说明添加 <mirror> ... </mirror>:
+        <mirrors>
+            <mirror>
+                <id>alimaven</id>
+                <name>aliyun maven</name>
+                <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+                <mirrorOf>central</mirrorOf>        
+            </mirror>
+        </mirrors>
+    到 $MAVEN_HOME/conf/settings.xml 中. (参考: https://blog.csdn.net/sheypang/article/details/79022260)
+    -->
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
+		<!-- log4j-core-2.11.1 存在安全漏洞, 应该使用 2.17.2 !
+        有漏洞版本的 log4j ( < 2.15.0 )
+        -->
+		<log4j.version>2.17.2</log4j.version>
+	</properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- 以下为手动添加 -->
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.3</version>
+        </dependency>
+
+        <!-- 2.11.1 存在安全漏洞, 应该使用 2.17.2
+        这里使用有漏洞版本的 log4j ( < 2.15.0 )
+        -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j.version}</version>
+
+			<!-- 编译时会引入依赖，打包是不引入依赖 -->
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j.version}</version>
+
+			<!-- 编译时会引入依赖，打包是不引入依赖 -->
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+	    <finalName>${project.artifactId}</finalName>
+        <plugins>
+		    <!-- 该插件的作用主要是处理将主程序与测试程序所需的源文件复制到输出编译文件夹中 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+					<!-- 在构建路径中 指定源文件编译的字符编码 -->
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+
+			<!-- java编译插件: 告诉maven在编译Java文件时使用什么版本的jre -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.2</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+
+		    <!-- 运行App (依赖 jar 在 lib 中):
+			   $ java -Djava.ext.dirs=./lib -jar target/log4jtest.jar
+			-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <executions>
+	                <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>com.github.App</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+	            </executions>
+            </plugin>
+        </plugins>
+    </build>        
+</project>

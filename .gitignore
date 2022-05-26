@@ -1,0 +1,8 @@
+.git/
+
+target/
+log/
+
+*.class
+*.pyc
+*.o
