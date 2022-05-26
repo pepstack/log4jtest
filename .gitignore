@@ -1,6 +1,7 @@
 .git/
 
 target/
+build/
 log/
 
 *.class

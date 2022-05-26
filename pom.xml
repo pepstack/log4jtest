@@ -29,7 +29,7 @@
 		<!-- log4j-core-2.11.1 存在安全漏洞, 应该使用 2.17.2 !
         有漏洞版本的 log4j ( < 2.15.0 )
         -->
-		<log4j.version>2.17.2</log4j.version>
+		<log4j.version>2.11.1</log4j.version>
 	</properties>
 
     <dependencies>
@@ -55,8 +55,8 @@
             <artifactId>log4j-core</artifactId>
             <version>${log4j.version}</version>
 
-			<!-- 编译时会引入依赖，打包是不引入依赖 -->
-            <scope>provided</scope>
+			<!-- 编译时会引入依赖，打包是不引入依赖
+            <scope>provided</scope> -->
         </dependency>
 
         <dependency>
@@ -64,8 +64,8 @@
             <artifactId>log4j-api</artifactId>
             <version>${log4j.version}</version>
 
-			<!-- 编译时会引入依赖，打包是不引入依赖 -->
-            <scope>provided</scope>
+			<!-- 编译时会引入依赖，打包是不引入依赖
+            <scope>provided</scope> -->
         </dependency>
     </dependencies>
 
