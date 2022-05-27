@@ -2,6 +2,31 @@
 
 2022-05-26
 
+务必首先阅读下面的文章：
+
+[Apache log4j漏洞常规修复方法](https://blog.csdn.net/zhangmingcai/article/details/122407246)
+
+不同版本的 Java 使用不同版本的 log4j2, 升级到不同版本的 log4j2:
+
+
+- Java 8 and later
+
+    https://www.apache.org/dyn/closer.lua/logging/log4j/2.17.2/apache-log4j-2.17.2-bin.tar.gz
+
+- Java 7
+
+    https://www.apache.org/dyn/closer.lua/logging/log4j/2.12.4/apache-log4j-2.12.4-bin.tar.gz
+
+- Java 6
+
+    https://www.apache.org/dyn/closer.lua/logging/log4j/2.3.2/apache-log4j-2.3.2-bin.tar.gz
+
+log4j1 升级到 log4j2：
+
+    https://logging.apache.org/log4j/2.x/manual/migration.html#Log4j1.2Bridge
+
+#### 工程测试
+
 创建 log4jtest.jar 包 （修改 pom.xml 的 <groupId>org.apache.logging.log4j</groupId> 部分以包含或不包含依赖 log4j-xxx.jar）
 
     $ mvn clean package

@@ -55,7 +55,7 @@
             <artifactId>log4j-core</artifactId>
             <version>${log4j.version}</version>
 
-			<!-- 编译时会引入依赖，打包是不引入依赖
+			<!-- 编译时会引入依赖，打包时不引入依赖
             <scope>provided</scope> -->
         </dependency>
 
@@ -64,8 +64,17 @@
             <artifactId>log4j-api</artifactId>
             <version>${log4j.version}</version>
 
-			<!-- 编译时会引入依赖，打包是不引入依赖
+			<!-- 编译时会引入依赖，打包时不引入依赖
             <scope>provided</scope> -->
+        </dependency>
+        
+        <!--
+        旧版的程序如果使用了 log4j1, 需要使用下面的桥接器以使用新的 log4j2
+        -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-1.2-api</artifactId>
+            <version>2.17.2</version>
         </dependency>
     </dependencies>
 
