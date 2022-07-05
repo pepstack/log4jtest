@@ -23,14 +23,17 @@
         </mirrors>
     到 $MAVEN_HOME/conf/settings.xml 中. (参考: https://blog.csdn.net/sheypang/article/details/79022260)
     -->
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		
-		<!-- log4j-core-2.11.1 存在安全漏洞, 应该使用 2.17.2 !
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- jackson-databind-2.10 之前的版本存在安全漏洞  -->
+        <jackson.version>2.13.3</jackson.version>
+
+        <!-- log4j-core-2.11.1 存在安全漏洞, 应该使用 2.17.2 !
         有漏洞版本的 log4j ( < 2.15.0 )
         -->
-		<log4j.version>2.11.1</log4j.version>
-	</properties>
+        <log4j.version>2.11.1</log4j.version>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -55,7 +58,7 @@
             <artifactId>log4j-core</artifactId>
             <version>${log4j.version}</version>
 
-			<!-- 编译时会引入依赖，打包时不引入依赖
+            <!-- 编译时会引入依赖，打包时不引入依赖
             <scope>provided</scope> -->
         </dependency>
 
@@ -64,10 +67,10 @@
             <artifactId>log4j-api</artifactId>
             <version>${log4j.version}</version>
 
-			<!-- 编译时会引入依赖，打包时不引入依赖
+            <!-- 编译时会引入依赖，打包时不引入依赖
             <scope>provided</scope> -->
         </dependency>
-        
+
         <!--
         旧版的程序如果使用了 log4j1, 需要使用下面的桥接器以使用新的 log4j2
         -->
@@ -76,49 +79,68 @@
             <artifactId>log4j-1.2-api</artifactId>
             <version>2.17.2</version>
         </dependency>
-        
-        
+
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>
             <version>2.12.4</version>
         </dependency>
+        
+        <!-- jackson-databind -->
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
-	    <finalName>${project.artifactId}</finalName>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
-		    <!-- 该插件的作用主要是处理将主程序与测试程序所需的源文件复制到输出编译文件夹中 -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.7</version>
-				<configuration>
-					<!-- 在构建路径中 指定源文件编译的字符编码 -->
-					<encoding>UTF-8</encoding>
-				</configuration>
-			</plugin>
+            <!-- 该插件的作用主要是处理将主程序与测试程序所需的源文件复制到输出编译文件夹中 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.7</version>
+                <configuration>
+                    <!-- 在构建路径中 指定源文件编译的字符编码 -->
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
 
-			<!-- java编译插件: 告诉maven在编译Java文件时使用什么版本的jre -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.2</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-					<encoding>UTF-8</encoding>
-				</configuration>
-			</plugin>
+            <!-- java编译插件: 告诉maven在编译Java文件时使用什么版本的jre -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.2</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
 
-		    <!-- 运行App (依赖 jar 在 lib 中):
-			   $ java -Djava.ext.dirs=./lib -jar target/log4jtest.jar
-			-->
+            <!-- 运行App (依赖 jar 在 lib 中):
+               $ java -Djava.ext.dirs=./lib -jar target/log4jtest.jar
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <executions>
-	                <execution>
+                    <execution>
                         <phase>package</phase>
                         <goals>
                             <goal>shade</goal>
@@ -131,7 +153,7 @@
                             </transformers>
                         </configuration>
                     </execution>
-	            </executions>
+                </executions>
             </plugin>
         </plugins>
     </build>        

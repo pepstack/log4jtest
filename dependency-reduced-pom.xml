@@ -55,6 +55,7 @@
   </dependencies>
   <properties>
     <log4j.version>2.11.1</log4j.version>
+    <jackson.version>2.13.3</jackson.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 </project>
